@@ -36,33 +36,23 @@ Action sm_tf2centeredrockets(int client, int args)
 	if (client < 1 || !IsClientInGame(client) || IsFakeClient(client))
 		return Plugin_Handled;
 
-	// No arguments. Toggle.
+	bool center;
+
 	if (args == 0)
 	{
-		SetCentered(client, !GetCentered(client));
-		CenterRocketsMaybe(client);
-		PrintToChat(client, "TF2 Centered Rockets toggled");
-		return Plugin_Handled;
-	}
-
-	char arg[128];
-	GetCmdArg(1, arg, sizeof(arg));
-
-	int val = StringToInt(arg, 10);
-	if (val == 0)
-	{
-		SetCentered(client, false);
-		CenterRocketsMaybe(client, 0.0);
-		PrintToChat(client, "TF2 Centered Rockets disabled");
-		return Plugin_Handled;
+		center = !GetCentered(client);
 	}
 	else
 	{
-		SetCentered(client, true);
-		CenterRocketsMaybe(client, 1.0);
-		PrintToChat(client, "TF2 Centered Rockets enabled");
-		return Plugin_Handled;
+		char arg[128];
+		GetCmdArg(1, arg, sizeof(arg));
+		center = !(0 == StringToInt(arg, 10));
 	}
+
+	SetCentered(client, center);
+	CenterRocketsMaybe(client, center ? 1.0 : 0.0);
+	PrintToChat(client, "[TF2 Centered Rockets] %s", center ? "Enabled" : "Disabled");
+	return Plugin_Handled;
 }
 
 Action Event_EverythingEver(Event event, const char[] name, bool dontBroadcast)
