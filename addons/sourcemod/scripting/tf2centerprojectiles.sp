@@ -175,10 +175,15 @@ void SetCenterAttribute(int client)
 {
 	if (IsFakeClient(client))
 		return;
+
 	int weapon = GetPlayerWeaponSlot(client, TFWeaponSlot_Primary);
 	if (weapon == -1) // How could this happen? :thinking:
 		return;
+
+	bool isTheOriginal = (GetEntProp(weapon, Prop_Send, "m_iItemDefinitionIndex") == 513);
+	bool center = GetCentered(client) || isTheOriginal;
+
 	// List of attributes at https://wiki.teamfortress.com/wiki/List_of_item_attributes
 	// 289 == centerfire_projectile
-	TF2Attrib_SetByDefIndex(weapon, 289, GetCentered(client) ? 1.0 : 0.0); 
+	TF2Attrib_SetByDefIndex(weapon, 289, center ? 1.0 : 0.0); 
 }
