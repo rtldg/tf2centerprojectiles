@@ -38,7 +38,7 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 
 public void OnPluginStart()
 {
-	RegConsoleCmd("sm_centerprojectiles", sm_centerprojectiles, "sm_centerprojectiles to toggle or sm_tf2centerprojectiles <1|0> to set");
+	RegConsoleCmd("sm_centerprojectiles", sm_centerprojectiles, "sm_centerprojectiles to toggle or sm_centerprojectiles [1|0] to set");
 	g_hCenterProjectiles = RegClientCookie("tf2centerprojectiles", "TF2 Center Projectiles thing", CookieAccess_Protected);
 	
 	// Called every player spawn...
