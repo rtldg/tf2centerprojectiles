@@ -20,6 +20,7 @@ public Plugin myinfo = {
 };
 
 bool g_bLate;
+bool g_bCentered[MAXPLAYERS+1];
 Handle g_hCenterProjectiles;
 Handle g_hWeapon_ShootPosition = null;
 Handle g_hIsViewModelFlipped = null;
@@ -87,10 +88,17 @@ public void OnClientPutInServer(int client)
 	}
 }
 
+public void OnClientCookiesCached(int client)
+{
+	char cookie[2];
+	GetClientCookie(client, g_hCenterProjectiles, cookie, sizeof(cookie));
+	g_bCentered[client] = (cookie[0] == '1');
+}
+
 // Hook to work with FirePipeBomb... aka grenade launcher & pipebomb launcher
 public MRESReturn Hook_Weapon_ShootPosition(int client, DHookReturn hReturn)
 {
-	if (!GetCentered(client))
+	if (!g_bCentered[client])
 	{
 		return MRES_Ignored;
 	}
@@ -120,7 +128,7 @@ public MRESReturn Hook_Weapon_ShootPosition(int client, DHookReturn hReturn)
 	// We need to return a ShootPosition that'll return the center once the game has added the offset.
 	// i.e. subtract g_fOffset_FirePipeBomb and then the game adds g_fOffset_FirePipeBomb
 	bool isFlipped = SDKCall(g_hIsViewModelFlipped, weapon);
-	ScaleVector(right, g_fOffset_FirePipeBomb * (isFlipped ? -1.0 : 1.0));
+	ScaleVector(right, isFlipped ? -g_fOffset_FirePipeBomb : g_fOffset_FirePipeBomb);
 	SubtractVectors(pos, right, pos);
 
 	hReturn.SetVector(pos);
@@ -136,7 +144,7 @@ Action sm_centerprojectiles(int client, int args)
 
 	if (args == 0)
 	{
-		center = !GetCentered(client);
+		center = !g_bCentered[client];
 	}
 	else
 	{
@@ -157,18 +165,12 @@ Action Event_EverythingEver(Event event, const char[] name, bool dontBroadcast)
 	return Plugin_Continue;
 }
 
-bool GetCentered(int client)
-{
-	char cookie[2];
-	GetClientCookie(client, g_hCenterProjectiles, cookie, sizeof(cookie));
-	return cookie[0] == '1';
-}
-
 void SetCentered(int client, bool center)
 {
 	char cookie[2];
 	cookie[0] = center ? '1' : '0';
 	SetClientCookie(client, g_hCenterProjectiles, cookie);
+	g_bCentered[client] = center;
 }
 
 void SetCenterAttribute(int client)
@@ -181,7 +183,7 @@ void SetCenterAttribute(int client)
 		return;
 
 	bool isTheOriginal = (GetEntProp(weapon, Prop_Send, "m_iItemDefinitionIndex") == 513);
-	bool center = GetCentered(client) || isTheOriginal;
+	bool center = g_bCentered[client] || isTheOriginal;
 
 	// List of attributes at https://wiki.teamfortress.com/wiki/List_of_item_attributes
 	// 289 == centerfire_projectile
