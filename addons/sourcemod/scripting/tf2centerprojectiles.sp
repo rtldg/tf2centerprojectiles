@@ -14,7 +14,7 @@ Copying and distribution of this file, with or without modification, are permitt
 public Plugin myinfo = {
 	name = "[TF2] Center Projectiles",
 	author = "rtldg & pufftwitt",
-	version = "6.9",
+	version = "7.0",
 	url = "https://github.com/rtldg/tf2centerprojectiles",
 	description = "Provides the command sm_centerprojectiles [0|1] to shoot rockets from the center (like The Original) for any rocket launcher, shoot pipebombs and sticky bombs from the center, and more!"
 };
