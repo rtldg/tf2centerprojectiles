@@ -154,14 +154,14 @@ Action sm_centerprojectiles(int client, int args)
 	}
 
 	SetCentered(client, center);
-	SetCenterAttribute(client);
+	CenterPlayer(client);
 	PrintToChat(client, "[TF2 Center Projectiles] %s", center ? "Enabled" : "Disabled");
 	return Plugin_Handled;
 }
 
 Action Event_EverythingEver(Event event, const char[] name, bool dontBroadcast)
 {
-	SetCenterAttribute(GetClientOfUserId(event.GetInt("userid")));
+	CenterPlayer(GetClientOfUserId(event.GetInt("userid")));
 	return Plugin_Continue;
 }
 
@@ -173,12 +173,18 @@ void SetCentered(int client, bool center)
 	g_bCentered[client] = center;
 }
 
-void SetCenterAttribute(int client)
+void CenterPlayer(int client)
 {
 	if (IsFakeClient(client))
 		return;
 
-	int weapon = GetPlayerWeaponSlot(client, TFWeaponSlot_Primary);
+	SetCenterAttribute(client, GetPlayerWeaponSlot(client, TFWeaponSlot_Primary));
+	SetCenterAttribute(client, GetPlayerWeaponSlot(client, TFWeaponSlot_Secondary));
+	SetCenterAttribute(client, GetPlayerWeaponSlot(client, TFWeaponSlot_Melee));
+}
+
+void SetCenterAttribute(int client, int weapon)
+{
 	if (weapon == -1) // How could this happen? :thinking:
 		return;
 
