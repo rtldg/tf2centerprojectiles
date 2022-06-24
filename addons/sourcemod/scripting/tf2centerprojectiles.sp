@@ -14,7 +14,7 @@ Copying and distribution of this file, with or without modification, are permitt
 public Plugin myinfo = {
 	name = "[TF2] Center Projectiles",
 	author = "rtldg & pufftwitt",
-	version = "7.0",
+	version = "7.1",
 	url = "https://github.com/rtldg/tf2centerprojectiles",
 	description = "Provides the command sm_centerprojectiles [0|1] to shoot rockets from the center (like The Original) for any rocket launcher, shoot pipebombs and sticky bombs from the center, and more!"
 };
@@ -41,7 +41,7 @@ public void OnPluginStart()
 {
 	RegConsoleCmd("sm_centerprojectiles", sm_centerprojectiles, "sm_centerprojectiles to toggle or sm_centerprojectiles [1|0] to set");
 	g_hCenterProjectiles = RegClientCookie("tf2centerprojectiles", "TF2 Center Projectiles thing", CookieAccess_Protected);
-	
+
 	// Called every player spawn...
 	HookEvent("player_spawn", Event_EverythingEver, EventHookMode_Post);
 	// Sent when a player gets a whole new set of items, aka touches a resupply locker / respawn cabinet or spawns in.
@@ -55,7 +55,7 @@ public void OnPluginStart()
 	}
 
 	int offset;
-	
+
 	if ((offset = GameConfGetOffset(hGameData, "Weapon_ShootPosition")) == -1)
 	{
 		SetFailState("Couldn't get the offset for Weapon_ShootPosition");
@@ -193,5 +193,5 @@ void SetCenterAttribute(int client, int weapon)
 
 	// List of attributes at https://wiki.teamfortress.com/wiki/List_of_item_attributes
 	// 289 == centerfire_projectile
-	TF2Attrib_SetByDefIndex(weapon, 289, center ? 1.0 : 0.0); 
+	TF2Attrib_SetByDefIndex(weapon, 289, center ? 1.0 : 0.0);
 }
