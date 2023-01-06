@@ -10,9 +10,9 @@ Copying and distribution of this file, with or without modification, are permitt
 #include <dhooks> // https://github.com/peace-maker/DHooks2
 
 #include <tf2attributes> // https://github.com/FlaminSarge/tf2attributes
-#include <SteamWorks>
+#include <SteamWorks> // https://github.com/KyleSanderson/SteamWorks/releases  --  https://users.alliedmods.net/~kyles/builds/SteamWorks/
 
-#define MY_VERSION "8.0a"
+#define MY_VERSION "8.0"
 
 public Plugin myinfo = {
 	name = "[TF2] Center Projectiles",
